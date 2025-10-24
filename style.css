@@ -1,0 +1,76 @@
+/* 清除默认样式 */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f5f0e1; /* 浅棕色背景 */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 转盘容器：缩小尺寸，裁剪超出的花边 */
+.wheel-container {
+    position: relative;
+    width: 70vw; /* 旋转区域宽度（比原80vw小，避免花边） */
+    height: 70vw; /* 高度=宽度，确保圆形 */
+    max-width: 500px; /* 最大宽度同步缩小 */
+    max-height: 500px;
+    overflow: hidden; /* 裁剪超出容器的部分（花边） */
+    border-radius: 50%; /* 容器圆形，与转盘匹配 */
+}
+
+/* 转盘图片：填充容器，核心内容居中 */
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover; /* 保持比例，裁剪边缘花边 */
+    /* 旋转动画：8秒，4-8圈（转速适中） */
+    transition: transform 8s cubic-bezier(0.2, 0.8, 0.3, 1);
+    -webkit-transition: transform 8s cubic-bezier(0.2, 0.8, 0.3, 1);
+    will-change: transform; /* 优化渲染 */
+    transform: translateZ(0);
+}
+
+/* 指针图片：小尺寸，尖端对准中心 */
+.pointer {
+    position: absolute;
+    top: 50%; /* 垂直居中基准 */
+    left: 50%; /* 水平居中基准 */
+    width: 20%; /* 宽度为容器20%（小尺寸） */
+    height: 40%; /* 高度为容器40%（长条形） */
+    transform: translate(-50%, -80%); /* 尖端对准中心 */
+    z-index: 10; /* 指针在转盘上方 */
+    pointer-events: none; /* 点击穿透 */
+}
+
+/* 中奖弹窗 */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none; /* 默认隐藏 */
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.prize-img {
+    max-width: 90%;
+    max-height: 80%;
+}
+
+.tip-text {
+    color: #f0f0f0;
+    font-size: 12px;
+    position: absolute;
+    bottom: 30px;
+    text-align: center;
+}

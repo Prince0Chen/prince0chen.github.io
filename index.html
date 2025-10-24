@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>幸运转盘</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 音频元素（8秒音频，旋转时同步播放） -->
+    <audio id="spinSound" src="音效.mp3" preload="auto"></audio>
+
+    <!-- 转盘容器（缩小尺寸，裁剪花边） -->
+    <div class="wheel-container">
+        <img src="images/wheel.png" class="wheel" id="wheel" onerror="this.src='images/placeholder.png'">
+        <img src="images/pointer.png" class="pointer" id="pointer" onerror="this.src='images/placeholder.png'">
+    </div>
+
+    <!-- 中奖弹窗 -->
+    <div class="popup" id="popup">
+        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="prize-img" id="prizeImg" onerror="this.src='images/placeholder.png'">
+        <div class="tip-text">点击任意位置关闭</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
