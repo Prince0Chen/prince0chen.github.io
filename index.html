@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>幸运转盘</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"> <!-- 绝对路径确保GitHub访问 -->
 </head>
 <body>
-    <!-- 音频元素（8秒音频，旋转时同步播放） -->
-    <audio id="spinSound" src="音效.mp3" preload="auto"></audio>
+    <!-- 8秒音频（根目录） -->
+    <audio id="spinSound" src="音频.mp3" preload="auto"></audio>
 
-    <!-- 转盘容器（缩小尺寸，裁剪花边） -->
+    <!-- 转盘容器（作为尺寸基准） -->
     <div class="wheel-container">
-        <img src="images/wheel.png" class="wheel" id="wheel" onerror="this.src='images/placeholder.png'">
-        <img src="images/pointer.png" class="pointer" id="pointer" onerror="this.src='images/placeholder.png'">
+        <img src="images/image1.png" class="wheel" id="wheel" alt="转盘"> <!-- 转盘图 -->
+        <img src="images/image2.png" class="pointer" id="pointer" alt="指针"> <!-- 指针图 -->
     </div>
 
     <!-- 中奖弹窗 -->
     <div class="popup" id="popup">
-        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="prize-img" id="prizeImg" onerror="this.src='images/placeholder.png'">
+        <img src="" class="prize-img" id="prizeImg" alt="中奖奖品">
         <div class="tip-text">点击任意位置关闭</div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- 绝对路径 -->
 </body>
 </html>

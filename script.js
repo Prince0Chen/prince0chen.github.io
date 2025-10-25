@@ -1,28 +1,31 @@
-// 获取页面元素
+// 获取元素
 const wheel = document.getElementById('wheel');
+const pointer = document.getElementById('pointer');
 const popup = document.getElementById('popup');
 const prizeImg = document.getElementById('prizeImg');
+const spinSound = document.getElementById('spinSound');
 const wheelContainer = document.querySelector('.wheel-container');
-const spinSound = document.getElementById('spinSound'); // 音频元素
 
-// 奖品配置（英文文件名）
+// 奖品配置（对应images/image3到image10）
 const prizes = [
-    'images/prize1.png',
-    'images/prize2.png',
-    'images/prize3.png',
-    'images/prize4.png',
-    'images/prize5.png',
-    'images/prize6.png',
-    'images/prize7.png',
-    'images/prize8.png'
+    'images/image3.png',  // 奖品1
+    'images/image4.png',  // 奖品2
+    'images/image5.png',  // 奖品3
+    'images/image6.png',  // 奖品4
+    'images/image7.png',  // 奖品5
+    'images/image8.png',  // 奖品6
+    'images/image9.png',  // 奖品7
+    'images/image10.png'  // 奖品8
 ];
-const probabilities = [5, 10, 15, 30, 15, 10, 8, 7]; // 概率总和100
-let drawCount = 0; // 已抽奖次数
-const maxDrawCount = 1; // 最多抽奖1次
-let isSpinning = false; // 是否正在旋转
+
+// 概率配置（总和100）
+const probabilities = [5, 10, 15, 30, 15, 10, 8, 7];
+let isSpinning = false;
+let drawCount = 0;
+const maxDraws = 1; // 最多抽奖1次
 
 // 生成概率范围
-function getProbabilityRanges() {
+function getProbRanges() {
     const ranges = [];
     let start = 0;
     for (const p of probabilities) {
@@ -31,34 +34,31 @@ function getProbabilityRanges() {
     }
     return ranges;
 }
-const probRanges = getProbabilityRanges();
+const probRanges = getProbRanges();
 
-// 随机选择中奖奖品
+// 随机选择奖品
 function selectPrize() {
-    const randomNum = Math.floor(Math.random() * 100);
+    const rand = Math.floor(Math.random() * 100);
     for (let i = 0; i < probRanges.length; i++) {
         const [min, max] = probRanges[i];
-        if (randomNum >= min && randomNum < max) {
-            return i;
-        }
+        if (rand >= min && rand < max) return i;
     }
-    return 0; // 兜底
+    return 0;
 }
 
-// 开始旋转（核心逻辑）
+// 开始旋转（8秒，4-8圈）
 function startSpin() {
-    // 限制：超过次数或正在旋转则不执行
-    if (drawCount >= maxDrawCount || isSpinning) return;
-    drawCount++;
+    if (isSpinning || drawCount >= maxDraws) return;
     isSpinning = true;
+    drawCount++;
 
-    // 1. 播放8秒音频（与旋转同步）
-    spinSound.currentTime = 0; // 重置音频到开头
-    spinSound.play().catch(err => {
-        console.log('提示：请先点击页面任意位置，再旋转（浏览器限制）');
+    // 播放8秒音频（同步旋转时间）
+    spinSound.currentTime = 0;
+    spinSound.play().catch(() => {
+        console.log('请先点击页面激活音频权限');
     });
 
-    // 2. 计算旋转角度（4-8圈，8秒完成）
+    // 计算旋转角度：4-8圈 + 目标奖品角度
     const prizeIndex = selectPrize();
     const anglePerPrize = 360 / prizes.length; // 每个奖品角度
     const minCircles = 4; // 最少4圈
@@ -68,13 +68,13 @@ function startSpin() {
         360 - (prizeIndex * anglePerPrize + anglePerPrize / 2) + totalCircles * 360
     );
 
-    // 3. 触发旋转（先重置角度，避免累积误差）
+    // 触发旋转
     wheel.style.transform = 'rotate(0deg)';
     setTimeout(() => {
         wheel.style.transform = `rotate(${targetAngle}deg)`;
     }, 10);
 
-    // 4. 8秒后显示结果（与音频、动画时长一致）
+    // 8秒后显示结果（与旋转/音频时长一致）
     setTimeout(() => {
         isSpinning = false;
         prizeImg.src = prizes[prizeIndex];
@@ -82,21 +82,16 @@ function startSpin() {
     }, 8000);
 }
 
-// 点击转盘中心区域触发旋转（80px范围）
-wheel.addEventListener('click', (e) => {
+// 点击转盘中心启动（80px范围）
+wheelContainer.addEventListener('click', (e) => {
     const rect = wheelContainer.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    const clickX = e.clientX;
-    const clickY = e.clientY;
-    const distance = Math.hypot(clickX - centerX, clickY - centerY);
-
-    if (distance <= 80) { // 中心80px内点击有效
-        startSpin();
-    }
+    const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+    if (distance <= 80) startSpin();
 });
 
-// 点击弹窗关闭
+// 关闭弹窗
 popup.addEventListener('click', () => {
     popup.style.display = 'none';
 });
